@@ -1,59 +1,59 @@
-import React, { useState } from 'react';
-import Dashboard from '../../dashboard/Dashboard';
-import MessageCard from './messageCard';
-import { makeStyles } from '@material-ui/core/styles';
-import Modal from '@material-ui/core/Modal';
-import Backdrop from '@material-ui/core/Backdrop';
-import Button from '@material-ui/core/Button';
-import Fade from '@material-ui/core/Fade';
-import Typography from '@material-ui/core/Typography';
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import TextField from '@material-ui/core/TextField';
-import SendIcon from '@material-ui/icons/Send';
-import { useSelector, useDispatch } from 'react-redux';
+import React, { useState } from "react";
+import Dashboard from "../../dashboard/Dashboard";
+import MessageCard from "./messageCard";
+import { makeStyles } from "@material-ui/core/styles";
+import Modal from "@material-ui/core/Modal";
+import Backdrop from "@material-ui/core/Backdrop";
+import Button from "@material-ui/core/Button";
+import Fade from "@material-ui/core/Fade";
+import Typography from "@material-ui/core/Typography";
+import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import TextField from "@material-ui/core/TextField";
+import SendIcon from "@material-ui/icons/Send";
+import { useSelector, useDispatch } from "react-redux";
 
-import './message.scss';
-import { setMessage } from '../../reducers/messagereducer';
+import "./message.scss";
+import { setMessage } from "../../reducers/messagereducer";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    overflow: 'scroll',
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    overflow: "scroll",
   },
   paper: {
     backgroundColor: theme.palette.background.paper,
-    border: '2px solid #000',
+    border: "2px solid #000",
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2, 4, 3),
-    width: '50%',
-    height: '50%',
-    overflow: 'scroll',
-    display: 'flex',
-    flexDirection:'column-reverse'
+    width: "50%",
+    height: "50%",
+    overflow: "scroll",
+    display: "flex",
+    flexDirection: "column-reverse",
   },
 
   container: {
     bottom: 0,
   },
   bubbleContainer: {
-    width: '100%',
-    display: 'flex',
+    width: "100%",
+    display: "flex",
   },
   bubble: {
-    border: '0.5px solid black',
-    borderRadius: '10px',
-    margin: '5px',
-    padding: '10px',
-    display: 'inline-block',
+    border: "0.5px solid black",
+    borderRadius: "10px",
+    margin: "5px",
+    padding: "10px",
+    display: "inline-block",
   },
   bubbleWrap: {
-    display: 'flex',
+    display: "flex",
   },
   inputContainer: {
-    display: 'flex',
-    justifyContent: 'flex-end',
+    display: "flex",
+    justifyContent: "flex-end",
   },
   replyButton: {
     marginTop: 15,
@@ -66,38 +66,36 @@ export function ChatLayout() {
   const requserID = useSelector((state) => state.auth.userID);
 
   const chatBubbles = message.messageListing[0].messageList.map((item) => {
-      if (item.sender_user_id === requserID) {
-        return (
-          <div className={`${classes.bubbleContainer} right`}>
-            <AccountCircleIcon fontSize="large" />
-            <div className="classes.bubbleWrap">
-              <div className={classes.bubble}>
-                <div className={classes.button}>{item.msg_text}</div>
-              </div>
-              <Typography color="textSecondary" className="chatTime">
-                {item.messageTime}
-              </Typography>
+    if (item.sender_user_id === requserID) {
+      return (
+        <div className={`${classes.bubbleContainer} right`}>
+          <AccountCircleIcon fontSize="large" />
+          <div className="classes.bubbleWrap">
+            <div className={classes.bubble}>
+              <div className={classes.button}>{item.msg_text}</div>
             </div>
+            <Typography color="textSecondary" className="chatTime">
+              {item.messageTime}
+            </Typography>
           </div>
-        );
-      } else {
-        return (
-          <div className={`${classes.bubbleContainer} left`}>
-            <AccountCircleIcon fontSize="large" />
-            <div className="classes.bubbleWrap">
-              <div className={classes.bubble}>
-                <div className={classes.button}>{item.msg_text}</div>
-              </div>
-              <Typography color="textSecondary" className="chatTime">
-                {item.messageTime}
-              </Typography>
+        </div>
+      );
+    } else {
+      return (
+        <div className={`${classes.bubbleContainer} left`}>
+          <AccountCircleIcon fontSize="large" />
+          <div className="classes.bubbleWrap">
+            <div className={classes.bubble}>
+              <div className={classes.button}>{item.msg_text}</div>
             </div>
+            <Typography color="textSecondary" className="chatTime">
+              {item.messageTime}
+            </Typography>
           </div>
-        );
-      }
-
-  }
-  );
+        </div>
+      );
+    }
+  });
   return <div className={classes.container}>{chatBubbles}</div>;
 }
 
@@ -105,10 +103,10 @@ export default function MessageModel() {
   const classes = useStyles();
 
   const [open, setOpen] = React.useState(false);
-  const [messageText, setMessageText] = React.useState('');
+  const [messageText, setMessageText] = React.useState("");
   const dispatch = useDispatch();
   const token = useSelector((state) => state.auth.token);
-  const detail = useSelector((state) => state.detail.listingDetail)
+  const detail = useSelector((state) => state.detail.listingDetail);
 
   const handleOpen = () => {
     setOpen(true);
@@ -143,7 +141,7 @@ export default function MessageModel() {
         <Fade in={open}>
           <div className={classes.paper}>
             <div className={classes.inputContainer}>
-            <TextField
+              <TextField
                 label="Enter Your Message"
                 id="messageText"
                 name="messageText"
@@ -152,17 +150,17 @@ export default function MessageModel() {
                 value={messageText}
                 onChange={(e) => setMessageText(e.target.value)}
               />
-          <Button
+              <Button
                 className={classes.replyButton}
                 onClick={async () => {
                   const response = await fetch(
-                    'http://localhost:3003/api/message/sendmessage',
+                    "https://heed.place/api/message/sendmessage",
                     {
-                      method: 'PUT',
-                      mode: 'cors',
-                      credentials: 'same-origin',
+                      method: "PUT",
+                      mode: "cors",
+                      credentials: "same-origin",
                       headers: {
-                        'Content-Type': 'application/json',
+                        "Content-Type": "application/json",
                         Authorization: `Bearer ${token}`,
                       },
                       body: JSON.stringify({
@@ -172,7 +170,7 @@ export default function MessageModel() {
                     }
                   );
                   // const response2 = await fetch(
-                  //   'http://localhost:3003/api/message/fetchallmessage',
+                  //   'https://heed.place/api/message/fetchallmessage',
                   //   {
                   //     method: 'GET',
                   //     mode: 'cors',
@@ -189,12 +187,8 @@ export default function MessageModel() {
               >
                 send
               </Button>
-              
-
             </div>
             <ChatLayout />
-              
-            
           </div>
         </Fade>
       </Modal>

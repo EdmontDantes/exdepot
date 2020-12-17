@@ -46,28 +46,23 @@ const useStyles = makeStyles({
   },
   itemIbidWithName: {
     maxWidth: "50%",
-
-  }
+  },
 });
 
 export function CardItemIbidWith(props) {
   const classes = useStyles();
   console.log("CardItemsIBidWith", props);
   const multipleItemsCardMedia = props.items_bid.map((item) => {
-    return(
-      <div className={classes.itemIbidWithName} >
+    return (
+      <div className={classes.itemIbidWithName}>
         <Typography variant="h6" component="h6">
           {item.name}
         </Typography>
         <CardMedia className={classes.media} image={item.images[0]} />
       </div>
-    )
+    );
   });
-  return (
-    <Card className={classes.cardContent}>
-      {multipleItemsCardMedia}
-    </Card>
-  );
+  return <Card className={classes.cardContent}>{multipleItemsCardMedia}</Card>;
 }
 
 export function MediaCard(props) {
@@ -75,71 +70,75 @@ export function MediaCard(props) {
   const dispatch = useDispatch();
   return (
     <Card className={classes.root}>
-        <CardMedia className={classes.media} image={props.image}></CardMedia>
-        <CardContent>
-          <Typography gutterBottom variant="h5" component="h3">
-            {props.title}
-          </Typography>
-          <Typography variant="body1" color="textSecondary" component="p">
-            Status:{props.status}
-          </Typography>
-        </CardContent>
-        <Typography gutterBottom variant="h5" component="h5">
-          Items I bid with:
+      <CardMedia className={classes.media} image={props.image}></CardMedia>
+      <CardContent>
+        <Typography gutterBottom variant="h5" component="h3">
+          {props.title}
         </Typography>
+        <Typography variant="body1" color="textSecondary" component="p">
+          Status:{props.status}
+        </Typography>
+      </CardContent>
+      <Typography gutterBottom variant="h5" component="h5">
+        Items I bid with:
+      </Typography>
       <CardItemIbidWith items_bid={props.items_bid} />
-      <CardActions className="card-action-buttons" onClick={async () => {
-        const response = await fetch(
-          `http://localhost:3003/api/listingbid/cancelbid`,
-          {
-            method: 'PUT',
-            mode: 'cors',
-            credentials: 'same-origin',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${props.usersToken}`
-            },
-            body: JSON.stringify({
-              _id: props.listingBidId,
-              }) 
-            });
-            console.log("Cancel work", response.json())
-            // dispatch(fetchOtherUsersBidsOnMyListing())
-            const responseToRefreshCurrBids = await fetch(
-              "http://localhost:3003/api/listingbid/fetchownerbid",
-              {
-                method: "GET",
-                mode: "cors",
-                credentials: "same-origin",
-                headers: {
-                  "Content-Type": "application/json",
-                  Authorization: `Bearer ${props.usersToken}`,
-                },
-              }
-            );
-      
-            let jsondata = await responseToRefreshCurrBids.json();
-            dispatch(setCurrBidsList({ currBidsList: jsondata.allListingBidByOwner }));
-            // props.setCurrBidsList({ currBidsList: jsondata.allListingBidByOwner });
-      }}>
-      {props.status === 'active' ? 
-        <Button size="small" color="secondary">
-          {<CancelIcon />} Cancel Bid
-        </Button> : null}  
-      
+      <CardActions
+        className="card-action-buttons"
+        onClick={async () => {
+          const response = await fetch(
+            `https://heed.place/api/listingbid/cancelbid`,
+            {
+              method: "PUT",
+              mode: "cors",
+              credentials: "same-origin",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${props.usersToken}`,
+              },
+              body: JSON.stringify({
+                _id: props.listingBidId,
+              }),
+            }
+          );
+          console.log("Cancel work", response.json());
+          // dispatch(fetchOtherUsersBidsOnMyListing())
+          const responseToRefreshCurrBids = await fetch(
+            "https://heed.place/api/listingbid/fetchownerbid",
+            {
+              method: "GET",
+              mode: "cors",
+              credentials: "same-origin",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${props.usersToken}`,
+              },
+            }
+          );
 
+          let jsondata = await responseToRefreshCurrBids.json();
+          dispatch(
+            setCurrBidsList({ currBidsList: jsondata.allListingBidByOwner })
+          );
+          // props.setCurrBidsList({ currBidsList: jsondata.allListingBidByOwner });
+        }}
+      >
+        {props.status === "active" ? (
+          <Button size="small" color="secondary">
+            {<CancelIcon />} Cancel Bid
+          </Button>
+        ) : null}
       </CardActions>
     </Card>
   );
 }
 
-
-
 export function CurrentBidsCards(props) {
-
   const currBids = useSelector((state) => state.currbids.currBidsList);
   const authToken = useSelector((state) => state.auth.token);
-  const filteredDispayCardForAcctive = currBids.filter((filterredCurrBidsActive) => filterredCurrBidsActive.status === "active")
+  const filteredDispayCardForAcctive = currBids.filter(
+    (filterredCurrBidsActive) => filterredCurrBidsActive.status === "active"
+  );
   const displayCards = filteredDispayCardForAcctive.map((item) => {
     return (
       <MediaCard
@@ -164,10 +163,11 @@ export function CurrentBidsCards(props) {
   );
 }
 
-
 export function AcceptedBidsCards(props) {
   const currBids = useSelector((state) => state.currbids.currBidsList);
-  const filteredDispayCardForAcctive = currBids.filter((filterredCurrBidsActive) => filterredCurrBidsActive.status !== "active")
+  const filteredDispayCardForAcctive = currBids.filter(
+    (filterredCurrBidsActive) => filterredCurrBidsActive.status !== "active"
+  );
   const displayCards = filteredDispayCardForAcctive.map((item) => {
     return (
       <MediaCard
@@ -189,7 +189,6 @@ export function AcceptedBidsCards(props) {
     </div>
   );
 }
-
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -242,7 +241,7 @@ export function CurrentBids(props) {
   useEffect(() => {
     async function fetchcurrbids() {
       const response = await fetch(
-        "http://localhost:3003/api/listingbid/fetchownerbid",
+        "https://heed.place/api/listingbid/fetchownerbid",
         {
           method: "GET",
           mode: "cors",

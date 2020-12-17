@@ -1,59 +1,54 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-export const createMessage= createAsyncThunk(
-  'createMessage',
+export const createMessage = createAsyncThunk(
+  "createMessage",
   async (detail, thunkAPI) => {
     const token = thunkAPI.getState().auth.token;
 
-    const fetchUrl = 'http://localhost:3003/api/message/createmessage';
+    const fetchUrl = "https://heed.place/api/message/createmessage";
     const response = await fetch(fetchUrl, {
-        method: 'POST',
-        mode: 'cors',
-        credentials: 'same-origin',
-        headers: {
-            'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({
-          user2ID: detail.ownerUserID,
-          user2Name: detail.ownerUserName,
+      method: "POST",
+      mode: "cors",
+      credentials: "same-origin",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        user2ID: detail.ownerUserID,
+        user2Name: detail.ownerUserName,
       }),
-      }
-      );
-      let jsondata = await response.json();
-      return jsondata.savedMessage
-    }
-  );
+    });
+    let jsondata = await response.json();
+    return jsondata.savedMessage;
+  }
+);
 
-export const fetchMessage= createAsyncThunk(
-  'fetchMessage',
+export const fetchMessage = createAsyncThunk(
+  "fetchMessage",
   async (detail, thunkAPI) => {
     const token = thunkAPI.getState().auth.token;
-    const fetchUrl = 'http://localhost:3003/api/message/createmessage';
+    const fetchUrl = "https://heed.place/api/message/createmessage";
     const response = await fetch(fetchUrl, {
-        method: 'POST',
-        mode: 'cors',
-        credentials: 'same-origin',
-        headers: {
-            'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({
-          user2ID: detail.user2ID,
-          user2Name: detail.user2Name,
+      method: "POST",
+      mode: "cors",
+      credentials: "same-origin",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        user2ID: detail.user2ID,
+        user2Name: detail.user2Name,
       }),
-      }
-      );
-      let jsondata = await response.json();
-      return jsondata.savedMessage
-    }
-  );
-
-
-
+    });
+    let jsondata = await response.json();
+    return jsondata.savedMessage;
+  }
+);
 
 export const messageSlice = createSlice({
-  name: 'message',
+  name: "message",
   initialState: {
     messageListing: [],
   },
@@ -71,4 +66,4 @@ export const messageSlice = createSlice({
     },
   },
 });
-export const { setMessage} = messageSlice.actions;
+export const { setMessage } = messageSlice.actions;

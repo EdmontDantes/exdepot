@@ -1,18 +1,18 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 export const fetchDetail = createAsyncThunk(
-  'fetchDetail',
+  "fetchDetail",
   async (listingID, thunkAPI) => {
     // let listingID = window.location.pathname.split('/')[2];
     const token = thunkAPI.getState().auth.token;
-    
-    const fetchUrl = `http://localhost:3003/api/listings/fetchone/${listingID}`;
+
+    const fetchUrl = `https://heed.place/api/listings/fetchone/${listingID}`;
     const response = await fetch(fetchUrl, {
-      method: 'GET',
-      mode: 'cors',
-      credentials: 'same-origin',
+      method: "GET",
+      mode: "cors",
+      credentials: "same-origin",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
     });
@@ -22,7 +22,7 @@ export const fetchDetail = createAsyncThunk(
 );
 
 export const detailSlice = createSlice({
-  name: 'detail',
+  name: "detail",
   initialState: {
     listingDetail: null,
   },
@@ -38,5 +38,3 @@ export const detailSlice = createSlice({
   },
 });
 export const { setDetail } = detailSlice.actions;
-
-

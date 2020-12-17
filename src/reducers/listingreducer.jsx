@@ -1,36 +1,33 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 export const fetchMyListings = createAsyncThunk(
-  'fetchMyListings',
+  "fetchMyListings",
   async (args, thunkAPI) => {
     const token = thunkAPI.getState().auth.token;
-    const fetchUrl = 'http://localhost:3003/api/listings/fetchownerlisting';
-    const response = await fetch(
-      fetchUrl,
-      {
-        method: 'GET',
-        mode: 'cors',
-        credentials: 'same-origin',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-      }
-    );
+    const fetchUrl = "https://heed.place/api/listings/fetchownerlisting";
+    const response = await fetch(fetchUrl, {
+      method: "GET",
+      mode: "cors",
+      credentials: "same-origin",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
     let jsondata = await response.json();
-    
-    return jsondata.ownerListing
+
+    return jsondata.ownerListing;
   }
 );
 
 export const listingSlice = createSlice({
-  name: 'listing',
+  name: "listing",
   initialState: {
-    listingList: []
+    listingList: [],
   },
   reducers: {
     setListing: (state, { payload }) => {
-      state.listingList = payload.listingList
+      state.listingList = payload.listingList;
     },
   },
   extraReducers: {
@@ -38,5 +35,5 @@ export const listingSlice = createSlice({
       state.listingList = action.payload;
     },
   },
-})
-export const { setListing } = listingSlice.actions
+});
+export const { setListing } = listingSlice.actions;

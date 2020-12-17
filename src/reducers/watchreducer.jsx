@@ -1,16 +1,16 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 export const fetchWatchList = createAsyncThunk(
-  'fetchWatchLists',
+  "fetchWatchLists",
   async (args, thunkAPI) => {
     const token = thunkAPI.getState().auth.token;
-    const fetchUrl = 'http://localhost:3003/api/watchlist/';
+    const fetchUrl = "https://heed.place/api/watchlist/";
     const response = await fetch(fetchUrl, {
-      method: 'GET',
-      mode: 'cors',
-      credentials: 'same-origin',
+      method: "GET",
+      mode: "cors",
+      credentials: "same-origin",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
     });
@@ -19,9 +19,8 @@ export const fetchWatchList = createAsyncThunk(
   }
 );
 
-
 export const watchSlice = createSlice({
-  name: 'watch',
+  name: "watch",
   initialState: {
     watchList: [],
   },
